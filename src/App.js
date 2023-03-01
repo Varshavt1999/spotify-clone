@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useEffect } from "react";
+import "./App.css";
+
+import Login from "./components/screens/Login";
+import Spotify from "./components/screens/Spotify";
+import { Context } from "./context/Store";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const {
+        state: { token },
+        dispatch,
+    } = useContext(Context);
+    useEffect(() => {
+        const hash = window.location.hash;
+        const token = hash.substring(1).split("&")[0].split("=")[1];
+        // console.log(hash, "hash");
+        console.log(token, "hash");
+        dispatch({
+            type: "SET_TOKEN",
+            token,
+        });
+    }, [token, dispatch]);
+
+    return <>{token ? <Spotify /> : <Login />}</>;
 }
 
 export default App;
